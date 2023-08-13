@@ -29,10 +29,14 @@ function setupDropdown(ticketCategories) {
 
 function setupIncrementer() {
   return `
-    <div>
-      <button id="decrementButton" class="quantity-button">-</button>
+    <div class="incrementer-container">   <!-- Added class for container -->
+      <button id="decrementButton" class="quantity-button">
+        <img src="./src/assets/dash.svg" alt="Logo">
+      </button>
       <input type="number" id="quantityInput" class="quantity-input" value="0" min="0" max="999">
-      <button id="incrementButton" class="quantity-button">+</button>
+      <button id="incrementButton" class="quantity-button">
+        <img src="./src/assets/plus.svg" alt="Logo">
+      </button>
     </div>
   `;
 }
@@ -150,7 +154,7 @@ export function createEvent(event) {
           </div>
           <div class="purchase-options text-gray-700">
             <button href="#" class="add-button">
-                <img src="./src/assets/bag-plus-fill.svg" alt="Logo">
+              <img src="./src/assets/bag-plus-fill.svg" alt="Logo">
             </button>
             <span id="totalPrice" class="total-price"></span> 
           </div>

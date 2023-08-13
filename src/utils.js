@@ -41,6 +41,14 @@ export function formatDate(dateString) {
 }
 
 
+export function formatPrice(price) {
+  return price.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+
 export function updatePrice(input, dropdown, priceElement) {
   const quantity = parseInt(input.value);
   let ticketPrice = 0;
@@ -52,11 +60,8 @@ export function updatePrice(input, dropdown, priceElement) {
   
   if (quantity > 0) {
     const totalPrice = ticketPrice * quantity;
-    // Using toLocaleString to format the number with commas
-    const formattedTotalPrice = totalPrice.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    // Use the new formatPrice function to get the formatted price
+    const formattedTotalPrice = formatPrice(totalPrice);
     priceElement.textContent = `RON ${formattedTotalPrice}`;
   } else {
     priceElement.textContent = '';

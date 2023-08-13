@@ -32,7 +32,7 @@ function getOrdersPageTemplate() {
         <div class="orders-section">
           <div class="orders"></div>
         </div>
-        <div class="cart-section">
+        <div class="edit-section">
         </div>
       </div>
     </div>
