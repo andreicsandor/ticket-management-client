@@ -228,6 +228,21 @@ h2 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   height: 85vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.edit-section img {
+  margin-bottom: 20px;
+}
+
+.edit-section-title {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 2rem; 
+  font-weight: bold;
 }
 
 @media (max-width: 950px) {

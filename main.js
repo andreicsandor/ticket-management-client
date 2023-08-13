@@ -33,6 +33,8 @@ function getOrdersPageTemplate() {
           <div class="orders"></div>
         </div>
         <div class="edit-section">
+          <img src="./src/assets/archive-fill.svg" alt="Logo">
+          <h2 class="edit-section-title">All your tickets, in one place</h2>
         </div>
       </div>
     </div>
