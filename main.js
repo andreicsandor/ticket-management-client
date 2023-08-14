@@ -1,14 +1,12 @@
-import { addEvents, addOrders } from './src/utils'
-import { fetchOrders } from './src/dto/getOrders';
-import { fetchTicketEvents } from './src/dto/getTicketEvents';
-
+import { addEvents, addOrders } from "./src/utils";
+import { fetchOrders } from "./src/dto/getOrders";
+import { fetchTicketEvents } from "./src/dto/getTicketEvents";
 
 // Navigate to a specific URL
 function navigateTo(url) {
   history.pushState(null, null, url);
   renderContent(url);
 }
-
 
 // HTML templates
 function getHomePageTemplate() {
@@ -24,7 +22,6 @@ function getHomePageTemplate() {
   `;
 }
 
-
 function getOrdersPageTemplate() {
   return `
     <div id="content">
@@ -33,93 +30,83 @@ function getOrdersPageTemplate() {
           <div class="orders"></div>
         </div>
         <div class="edit-section">
-          <img src="./src/assets/archive-fill.svg" alt="Logo">
-          <h2 class="edit-section-title">All your tickets, in one place</h2>
+          <img src="./src/assets/bag-fill.svg" alt="Logo" style="margin-bottom: 20px">
+          <h2 class="edit-section-title">Manage Your Orders</h2>
         </div>
       </div>
     </div>
   `;
 }
 
-
 function setupNavigationEvents() {
-  const navLinks = document.querySelectorAll('nav a');
+  const navLinks = document.querySelectorAll("nav a");
   navLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
+    link.addEventListener("click", (event) => {
       event.preventDefault();
-      const href = link.getAttribute('href');
+      const href = link.getAttribute("href");
       navigateTo(href);
     });
   });
 }
 
-
 function setupMobileMenuEvent() {
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
 
   if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    mobileMenuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
     });
   }
 }
 
-
 function setupPopstateEvent() {
-  window.addEventListener('popstate', () => {
+  window.addEventListener("popstate", () => {
     const currentUrl = window.location.pathname;
     renderContent(currentUrl);
   });
 }
-
 
 function setupInitialPage() {
   const initialUrl = window.location.pathname;
   renderContent(initialUrl);
 }
 
-
 function renderHomePage() {
-  const mainContentDiv = document.querySelector('.main-content-component');
+  const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getHomePageTemplate();
 
   let events;
 
-  fetchTicketEvents()
-    .then((data) => {
-      events = data;
-      addEvents(events);
-    });
+  fetchTicketEvents().then((data) => {
+    events = data;
+    addEvents(events);
+  });
 }
 
-
 function renderOrdersPage() {
-  const mainContentDiv = document.querySelector('.main-content-component');
+  const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
   let orders;
 
-  fetchOrders()
-    .then((data) => {
-      orders = data;
-      addOrders(orders);
-    });
+  fetchOrders().then((data) => {
+    orders = data;
+    addOrders(orders);
+  });
 }
-
 
 // Render content based on URL
 function renderContent(url) {
-  const mainContentDiv = document.querySelector('.main-content-component');
-  mainContentDiv.innerHTML = '';
+  const mainContentDiv = document.querySelector(".main-content-component");
+  mainContentDiv.innerHTML = "";
 
-  if (url === '/') {
+  if (url === "/") {
     renderHomePage();
-  } else if (url === '/orders') {
+  } else if (url === "/orders") {
     renderOrdersPage();
   }
 }
-
 
 // Call the setup functions
 setupNavigationEvents();

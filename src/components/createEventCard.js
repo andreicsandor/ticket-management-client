@@ -1,47 +1,7 @@
 import { formatDate, updatePrice, toggleCartButton } from "../utils";
+import { createDropdown } from "./createTCDropdown";
+import { createIncrementer } from "./createIncrementer";
 import { API_BASE_URL } from "../config";
-
-function setupDropdown(ticketCategories) {
-  if (!ticketCategories || ticketCategories.length === 0) return "";
-
-  if (ticketCategories.length === 1) {
-    return `
-      <span class="ticket-category-text" data-price="${ticketCategories[0].price}">
-        ${ticketCategories[0].ticketCategoryDescription}
-      </span>
-    `;
-  }
-
-  const options = ticketCategories
-    .map(
-      (category) => `
-    <option value="${category.ticketCategoryId}" data-price="${category.price}">
-      ${category.ticketCategoryDescription} 
-    </option>
-  `
-    )
-    .join("");
-
-  return `
-    <select class="ticket-category-dropdown">
-      ${options}
-    </select>
-  `;
-}
-
-function setupIncrementer() {
-  return `
-    <div class="incrementer-container">   <!-- Added class for container -->
-      <button id="decrementButton" class="quantity-button">
-        <img src="./src/assets/dash.svg" alt="Logo">
-      </button>
-      <input type="number" id="quantityInput" class="quantity-input" value="0" min="0" max="999">
-      <button id="incrementButton" class="quantity-button">
-        <img src="./src/assets/plus.svg" alt="Logo">
-      </button>
-    </div>
-  `;
-}
 
 function attachEvents(cardElement) {
   const decrementButton = cardElement.querySelector("#decrementButton");
@@ -155,11 +115,11 @@ export function createEvent(event) {
           <p class="description text-gray-700">${event.eventDescription}</p>
           <p class="date text-gray-700">${displayDate}</p>
           <div class="order-options text-gray-700">
-            ${setupDropdown(event.ticketCategories)}
-            ${setupIncrementer()}
+            ${createDropdown(event.ticketCategories)}
+            ${createIncrementer()}
           </div>
           <div class="purchase-options text-gray-700">
-            <button href="#" class="add-button">
+            <button class="add-button">
               <img src="./src/assets/bag-plus-fill.svg" alt="Logo">
             </button>
             <span id="totalPrice" class="total-price"></span> 
