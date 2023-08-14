@@ -55,42 +55,42 @@ function attachEvents(cardElement) {
 }
 
 function handleAddToCart(dropdown, input, cartButton, priceElement) {
-  const ticketType = dropdown
-    ? dropdown.options[dropdown.selectedIndex].value
-    : null;
+  const ticketType = dropdown ? dropdown.options[dropdown.selectedIndex].value : null;
   const quantity = parseInt(input.value, 10);
 
-  if (quantity > 0 && ticketType) {
-    fetch(`${API_BASE_URL}/Order/Create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ticketCategoryId: ticketType,
-        numberOfTickets: quantity,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((data) => {
-            throw new Error(data.message);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        input.value = 0;
-        dropdown.selectedIndex = 0;
-        cartButton.disabled = true;
-        priceElement.textContent = "";
-      })
-      .catch((error) => {
-        console.error("Error saving purchased event:", error);
-      });
-  } else {
-    console.error("No valid input data.", error);
+  if (quantity <= 0 || !ticketType) {
+    console.error("No valid input data.");
+    return;
   }
+
+  fetch(`${API_BASE_URL}/Order/Create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ticketCategoryId: ticketType,
+      numberOfTickets: quantity,
+    }),
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else if (response.status === 400) {
+      throw new Error("Bad request. Failed to save order.");
+    } else {
+      throw new Error("Unknown error occurred while saving order.");
+    }
+  })
+  .then(data => {
+    input.value = 0;
+    dropdown.selectedIndex = 0;
+    cartButton.disabled = true;
+    priceElement.textContent = "";
+  })
+  .catch(error => {
+    console.error("Error saving purchased event:", error);
+  });
 }
 
 export function createEvent(event) {
