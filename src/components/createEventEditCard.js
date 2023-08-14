@@ -94,9 +94,7 @@ export function createEventEditCard(event, order) {
 
   const contentMarkup = `
       <div class="event-edit-card">
-        <img src="${event.eventImage}" class="card-img-top" alt="${
-          event.eventImage
-        }">
+        <img src="${event.eventImage}" class="card-img-top" alt="${event.eventImage}">
         <div class="card-body">
           <header>
             <h2 class="event-title text-2xl font-bold">${event.eventName}</h2>
@@ -105,7 +103,7 @@ export function createEventEditCard(event, order) {
             <p class="description text-gray-700">${event.eventDescription}</p>
             <p class="date text-gray-700">${displayDate}</p>
             <div class="order-options text-gray-700">
-              ${createDropdown(event.ticketCategories, order.ticketCategory)}
+              ${createDropdown(event.ticketCategories)}
               ${createIncrementer()}
             </div>
             <div class="purchase-options text-gray-700">
@@ -121,7 +119,19 @@ export function createEventEditCard(event, order) {
 
   eventCard.innerHTML = contentMarkup;
 
+  const dropdown = eventCard.querySelector('.ticket-category-dropdown');
+  if (dropdown) {
+    const optionToSelect = dropdown.querySelector(`option[value="${order.ticketCategory}"]`);
+    if (optionToSelect) {
+      optionToSelect.selected = true;
+    }
+  }
+
+  const quantityInput = eventCard.querySelector('#quantityInput');
+  quantityInput.value = order.numberOfTickets;
+
   attachEvents(eventCard, order);
 
   return eventCard;
 }
+
