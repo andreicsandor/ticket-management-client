@@ -1,5 +1,5 @@
 export function createIncrementer() {
-    return `
+  return `
       <div class="incrementer-container"> 
         <button id="decrementButton" class="quantity-button">
           <img src="./src/assets/dash.svg" alt="Logo">
@@ -10,4 +10,4 @@ export function createIncrementer() {
         </button>
       </div>
     `;
-  }
+}
