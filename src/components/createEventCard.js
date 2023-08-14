@@ -1,9 +1,8 @@
-import { formatDate, updatePrice, toggleCartButton } from '../utils'
-import { API_BASE_URL } from '../config';
-
+import { formatDate, updatePrice, toggleCartButton } from "../utils";
+import { API_BASE_URL } from "../config";
 
 function setupDropdown(ticketCategories) {
-  if (!ticketCategories || ticketCategories.length === 0) return '';
+  if (!ticketCategories || ticketCategories.length === 0) return "";
 
   if (ticketCategories.length === 1) {
     return `
@@ -13,11 +12,15 @@ function setupDropdown(ticketCategories) {
     `;
   }
 
-  const options = ticketCategories.map(category => `
+  const options = ticketCategories
+    .map(
+      (category) => `
     <option value="${category.ticketCategoryId}" data-price="${category.price}">
       ${category.ticketCategoryDescription} 
     </option>
-  `).join('');
+  `
+    )
+    .join("");
 
   return `
     <select class="ticket-category-dropdown">
@@ -25,7 +28,6 @@ function setupDropdown(ticketCategories) {
     </select>
   `;
 }
-
 
 function setupIncrementer() {
   return `
@@ -41,68 +43,68 @@ function setupIncrementer() {
   `;
 }
 
-
 function attachEvents(cardElement) {
-  const decrementButton = cardElement.querySelector('#decrementButton');
-  const incrementButton = cardElement.querySelector('#incrementButton');
-  const cartButton = cardElement.querySelector('.add-button');
-  const input = cardElement.querySelector('.quantity-input');
-  const dropdown = cardElement.querySelector('.ticket-category-dropdown');
-  const priceElement = cardElement.querySelector('#totalPrice');
-  
-  decrementButton.addEventListener('click', function() {
+  const decrementButton = cardElement.querySelector("#decrementButton");
+  const incrementButton = cardElement.querySelector("#incrementButton");
+  const cartButton = cardElement.querySelector(".add-button");
+  const input = cardElement.querySelector(".quantity-input");
+  const dropdown = cardElement.querySelector(".ticket-category-dropdown");
+  const priceElement = cardElement.querySelector("#totalPrice");
+
+  decrementButton.addEventListener("click", function () {
     if (input.value > input.min) {
       input.value = parseInt(input.value, 10) - 1;
     }
     toggleCartButton(input, cartButton);
-    updatePrice(input, dropdown, priceElement); 
+    updatePrice(input, dropdown, priceElement);
   });
 
-  incrementButton.addEventListener('click', function() {
+  incrementButton.addEventListener("click", function () {
     if (input.value < input.max) {
       input.value = parseInt(input.value, 10) + 1;
     }
     toggleCartButton(input, cartButton);
-    updatePrice(input, dropdown, priceElement); 
+    updatePrice(input, dropdown, priceElement);
   });
 
-  input.addEventListener('blur', () => {
+  input.addEventListener("blur", () => {
     if (!input.value) {
       input.value = 0;
     }
     toggleCartButton(input, cartButton);
-    updatePrice(input, dropdown, priceElement); 
+    updatePrice(input, dropdown, priceElement);
   });
 
-  input.addEventListener('input', function() {
+  input.addEventListener("input", function () {
     toggleCartButton(input, cartButton);
-    updatePrice(input, dropdown, priceElement); 
+    updatePrice(input, dropdown, priceElement);
   });
 
-  cartButton.addEventListener('click', function() {
+  cartButton.addEventListener("click", function () {
     handleAddToCart(dropdown, input, cartButton, priceElement);
   });
 
-  if (dropdown) { 
-    dropdown.addEventListener('change', function() {
-      updatePrice(input, dropdown, priceElement); 
+  if (dropdown) {
+    dropdown.addEventListener("change", function () {
+      updatePrice(input, dropdown, priceElement);
     });
   }
 
   toggleCartButton(input, cartButton);
-  updatePrice(input, dropdown, priceElement);  
+  updatePrice(input, dropdown, priceElement);
 }
 
-
 function handleAddToCart(dropdown, input, cartButton, priceElement) {
-  const ticketType = dropdown ? dropdown.options[dropdown.selectedIndex].value : null;
+  const ticketType = dropdown
+    ? dropdown.options[dropdown.selectedIndex].value
+    : null;
   const quantity = parseInt(input.value, 10);
 
   if (quantity > 0 && ticketType) {
     fetch(`${API_BASE_URL}/Order/Create`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ticketCategoryId: ticketType,
@@ -121,26 +123,30 @@ function handleAddToCart(dropdown, input, cartButton, priceElement) {
         input.value = 0;
         dropdown.selectedIndex = 0;
         cartButton.disabled = true;
-        priceElement.textContent = '';
+        priceElement.textContent = "";
       })
       .catch((error) => {
-        console.error('Error saving purchased event:', error);
+        console.error("Error saving purchased event:", error);
       });
   } else {
-    console.error('No valid input data.', error);
+    console.error("No valid input data.", error);
   }
 }
 
-
 export function createEvent(event) {
-  const eventCard = document.createElement('div');
+  const eventCard = document.createElement("div");
   const formattedStartDate = formatDate(event.startDate);
   const formattedEndDate = formatDate(event.endDate);
-  const displayDate = formattedStartDate === formattedEndDate ? formattedStartDate : `${formattedStartDate} – ${formattedEndDate}`;
+  const displayDate =
+    formattedStartDate === formattedEndDate
+      ? formattedStartDate
+      : `${formattedStartDate} – ${formattedEndDate}`;
 
   const contentMarkup = `
     <div class="event-card">
-      <img src="${event.eventImage}" class="card-img-top" alt="${event.eventImage}">
+      <img src="${event.eventImage}" class="card-img-top" alt="${
+        event.eventImage
+      }">
       <div class="card-body">
         <header>
           <h2 class="event-title text-2xl font-bold">${event.eventName}</h2>
@@ -162,11 +168,10 @@ export function createEvent(event) {
       </div>
     </div>
   `;
-  
+
   eventCard.innerHTML = contentMarkup;
 
   attachEvents(eventCard);
 
   return eventCard;
 }
-
