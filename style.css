@@ -140,7 +140,7 @@ h2 {
 /* Orders page styles */
 .orders-container {
   display: flex;
-  gap: var(--base-margin);
+  gap: var(--medium-padding);
   flex-wrap: wrap;
   height: 90vh;
   justify-content: space-between; 
