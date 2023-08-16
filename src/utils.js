@@ -47,10 +47,6 @@ export function refreshOrderCard(order) {
 export function resetEditPanel() {
   const editSection = document.querySelector(".edit-section");
 
-  if (!editSection) {
-    return;
-  }
-
   const contentMarkup = `
         <img src="./src/assets/bag-fill.svg" alt="Logo" style="margin-bottom: 20px">
         <h2 class="edit-section-title">Manage Your Orders</h2>
