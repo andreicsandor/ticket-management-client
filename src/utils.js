@@ -1,35 +1,64 @@
-import { createEvent } from "./components/createEventCard";
-import { createOrder } from "./components/createOrderCard";
-import { fetchEvent } from "./dto/getEvents";
+import { createEventCard } from "./components/createEventCard";
+import { createOrderCard } from "./components/createOrderCard";
+import { getEvent } from "./api/fetchEvents";
 
-export const addOrders = (orders) => {
+export const addOrderCards = (orders) => {
+  resetEditPanel();
+
   const ordersContainer = document.querySelector(".orders");
   ordersContainer.innerHTML = "No orders available";
 
   if (orders.length) {
     ordersContainer.innerHTML = "";
     orders.forEach((order) => {
-      let eventName;
-
-      fetchEvent(order.eventId).then((data) => {
-        eventName = data.eventName;
-        ordersContainer.appendChild(createOrder(order, eventName));
+      getEvent(order.eventId).then((data) => {
+        const eventName = data.eventName;
+        ordersContainer.appendChild(createOrderCard(order, eventName));
       });
     });
   }
 };
 
-export const addEvents = (events) => {
+export const addEventCards = (events) => {
   const eventsContainer = document.querySelector(".events");
   eventsContainer.innerHTML = "No events available";
 
   if (events.length) {
     eventsContainer.innerHTML = "";
     events.forEach((event) => {
-      eventsContainer.appendChild(createEvent(event));
+      eventsContainer.appendChild(createEventCard(event));
     });
   }
 };
+
+export function refreshOrderCard(order) {
+  const orderCardToUpdate = document.querySelector(
+    `#order-card-${order.orderId}`
+  );
+  const parentNode = orderCardToUpdate.parentNode;
+
+  getEvent(order.eventId).then((data) => {
+      const eventName = data.eventName;
+      const updatedOrderCard = createOrderCard(order, eventName);
+      parentNode.replaceChild(updatedOrderCard, orderCardToUpdate);
+    })
+};
+
+export function resetEditPanel() {
+  const editSection = document.querySelector(".edit-section");
+
+  if (!editSection) {
+    return;
+  }
+
+  const contentMarkup = `
+        <img src="./src/assets/bag-fill.svg" alt="Logo" style="margin-bottom: 20px">
+        <h2 class="edit-section-title">Manage Your Orders</h2>
+    `;
+
+  editSection.innerHTML = "";
+  editSection.innerHTML = contentMarkup;
+}
 
 export function formatDate(dateString) {
   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -43,7 +72,7 @@ export function formatPrice(price) {
   });
 }
 
-export function updatePrice(input, dropdown, priceElement) {
+export function updatePriceItem(input, dropdown, priceElement) {
   const quantity = parseInt(input.value);
   let ticketPrice = 0;
 

@@ -1,6 +1,6 @@
-import { addEvents, addOrders } from "./src/utils";
-import { fetchOrders } from "./src/dto/getOrders";
-import { fetchTicketEvents } from "./src/dto/getTicketEvents";
+import { addEventCards, addOrderCards } from "./src/utils";
+import { getOrders } from "./src/api/fetchOrders";
+import { getEvents } from "./src/api/fetchEvents";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -14,8 +14,7 @@ function getHomePageTemplate() {
     <div id="content" >
       <div class="events-container">
         <div class="events-section">
-          <div class="events">
-          </div>
+          <div class="events"></div>
         </div>
       </div>
     </div>
@@ -29,10 +28,7 @@ function getOrdersPageTemplate() {
         <div class="orders-section">
           <div class="orders"></div>
         </div>
-        <div class="edit-section">
-          <img src="./src/assets/bag-fill.svg" alt="Logo" style="margin-bottom: 20px">
-          <h2 class="edit-section-title">Manage Your Orders</h2>
-        </div>
+        <div class="edit-section"></div>
       </div>
     </div>
   `;
@@ -78,9 +74,9 @@ function renderHomePage() {
 
   let events;
 
-  fetchTicketEvents().then((data) => {
+  getEvents().then((data) => {
     events = data;
-    addEvents(events);
+    addEventCards(events);
   });
 }
 
@@ -90,9 +86,9 @@ function renderOrdersPage() {
 
   let orders;
 
-  fetchOrders().then((data) => {
+  getOrders().then((data) => {
     orders = data;
-    addOrders(orders);
+    addOrderCards(orders);
   });
 }
 
