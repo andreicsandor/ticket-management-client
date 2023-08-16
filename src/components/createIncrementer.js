@@ -1,4 +1,4 @@
-export function createIncrementer() {
+export function createIncrementerItem() {
   return `
       <div class="incrementer-container"> 
         <button id="decrementButton" class="quantity-button">

@@ -1,82 +1,24 @@
-import { formatDate, formatPrice } from "../utils";
-import { createEventEditCard } from "./createEventEditCard";
-import { fetchEvent } from "../dto/getEvents";
-import { API_BASE_URL } from "../config";
+import { formatDate, formatPrice, resetEditPanel } from "../utils";
+import { createEditableCard } from "./createEditableCard";
+import { getEvent } from "../api/fetchEvents";
+import { deleteOrder } from "../api/deleteOrders";
 
-function attachEvents(orderCard, order) {
-  const deleteButton = orderCard.querySelector(".delete-button");
-  deleteButton.addEventListener("click", function () {
-    handleDelete(order);
-  });
-
-  const updateButton = orderCard.querySelector(".update-button");
-  updateButton.addEventListener("click", function () {
-    handleEdit(order);
-  });
-
-  orderCard.addEventListener("click", function () {
-    handleEdit(order);
-  });
-}
-
-function handleDelete(order) {
-  fetch(`${API_BASE_URL}/Order/Delete?id=${order.orderId}`, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to delete order");
-      }
-      location.reload();
-    })
-    .catch((error) => {
-      console.error("Error deleting the order:", error);
-    });
-}
-
-async function handleEdit(order) {
-  const relatedEvent = await fetchEvent(order.eventId);
-  const editableCard = createEventEditCard(relatedEvent, order);
-
-  const editSection = document.querySelector(".edit-section");
-  editSection.innerHTML = "";
-
-  editSection.appendChild(editableCard);
-}
-
-export const addOrders = (orders) => {
-  const ordersContainer = document.querySelector(".orders");
-  ordersContainer.innerHTML = "No orders available";
-
-  if (orders.length) {
-    ordersContainer.innerHTML = "";
-    orders.forEach((order) => {
-      let eventName;
-
-      fetchEvent(order.eventId).then((data) => {
-        eventName = data.eventName;
-        ordersContainer.appendChild(createOrder(order, eventName));
-      });
-    });
-  }
-};
-
-export function createOrder(order, eventName) {
+export function createOrderCard(order, eventName) {
   const orderCard = document.createElement("div");
   const formattedDate = formatDate(order.orderedAt);
   const formattedPrice = formatPrice(order.totalPrice);
 
   const contentMarkup = `
-    <div class="order-card">
+    <div class="order-card" id="order-card-${order.orderId}">
       <div class="card-body">
-        <div>
+        <div class="order-information">
           <header>
             <h2 class="event-title">${eventName}</h2>
-          </header>
+          </header> 
           <div class="content">
-            <p class="text-gray-700">${order.numberOfTickets} ${
-              order.ticketCategory
-            } ticket${order.numberOfTickets > 1 ? "s" : ""}</p>
+            <p class="text-gray-700 ticket-quantity">${order.numberOfTickets} 
+            <span class="ticket-type">${order.ticketCategory}</span> 
+            ticket${order.numberOfTickets > 1 ? "s" : ""}</p>
             <p class="text-gray-700">RON ${formattedPrice}</p>
             <p class="date text-gray-700">${formattedDate}</p>
           </div>
@@ -100,4 +42,41 @@ export function createOrder(order, eventName) {
   attachEvents(orderCard, order);
 
   return orderCard;
+}
+
+async function deleteHandler(order, orderCardElement) {
+  const orderId = order.orderId;
+
+  deleteOrder(orderId)
+    .then(() => {
+      orderCardElement.remove();
+      resetEditPanel();
+    })
+    .catch((error) => {});
+}
+
+async function editHandler(order) {
+  const relatedEvent = await getEvent(order.eventId);
+  const editableCard = createEditableCard(relatedEvent, order);
+
+  const editSection = document.querySelector(".edit-section");
+  editSection.innerHTML = "";
+
+  editSection.appendChild(editableCard);
+}
+
+function attachEvents(orderCard, order) {
+  const deleteButton = orderCard.querySelector(".delete-button");
+  deleteButton.addEventListener("click", function () {
+    deleteHandler(order, orderCard);
+  });
+
+  const updateButton = orderCard.querySelector(".update-button");
+  updateButton.addEventListener("click", function () {
+    editHandler(order);
+  });
+
+  orderCard.addEventListener("click", function () {
+    editHandler(order);
+  });
 }

@@ -1,4 +1,4 @@
-export function createDropdown(ticketCategories) {
+export function createDropdownItem(ticketCategories) {
   if (!ticketCategories || ticketCategories.length === 0) return "";
 
   const options = ticketCategories
