@@ -11,7 +11,11 @@ function attachEvents(orderCard, order) {
 
   const updateButton = orderCard.querySelector(".update-button");
   updateButton.addEventListener("click", function () {
-    handleEdit(orderCard, order);
+    handleEdit(order);
+  });
+
+  orderCard.addEventListener("click", function () {
+    handleEdit(order);
   });
 }
 
@@ -30,7 +34,7 @@ function handleDelete(order) {
     });
 }
 
-async function handleEdit(orderCard, order) {
+async function handleEdit(order) {
   const relatedEvent = await fetchEvent(order.eventId);
   const editableCard = createEventEditCard(relatedEvent, order);
 
