@@ -248,7 +248,7 @@ h2 {
   box-shadow: var(--medium-shadow);
   margin: auto;
   overflow: hidden;
-  width: 90%;
+  width: 80%;
 }
 
 .event-edit-card .card-img-top {
