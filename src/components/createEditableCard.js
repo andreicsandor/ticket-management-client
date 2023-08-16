@@ -11,6 +11,7 @@ export function createEditableCard(event, order) {
     formattedStartDate === formattedEndDate
       ? formattedStartDate
       : `${formattedStartDate} – ${formattedEndDate}`;
+  const orderCategory = order.ticketCategory;
 
   const contentMarkup = `
       <div class="order-edit-card">
@@ -25,7 +26,7 @@ export function createEditableCard(event, order) {
             <p class="description text-gray-700">${event.eventDescription}</p>
             <p class="date text-gray-700">${displayDate}</p>
             <div class="order-options text-gray-700">
-              ${createDropdownItem(event.ticketCategories)}
+              ${createDropdownItem(event.ticketCategories, orderCategory)}
               ${createIncrementerItem()}
             </div>
             <div class="purchase-options text-gray-700">
@@ -68,6 +69,11 @@ function updateHandler(orderCardElement, order) {
     orderCardElement.querySelector(".quantity-input").value
   );
 
+  const dropdown = orderCardElement.querySelector(".ticket-category-dropdown");
+  const selectedOption = dropdown.options[dropdown.selectedIndex];
+  const newTicketPrice = parseFloat(selectedOption.getAttribute("data-price"));
+  const newTotalPrice = newQuantity * newTicketPrice;
+
   if (
     (newTicketType == order.ticketCategory &&
       newQuantity == order.numberOfTickets) ||
@@ -80,6 +86,7 @@ function updateHandler(orderCardElement, order) {
 
   order.numberOfTickets = newQuantity;
   order.ticketCategory = newTicketType;
+  order.totalPrice = newTotalPrice;
 
   updateOrder(orderId, newTicketType, newQuantity)
     .then(() => {
@@ -89,13 +96,13 @@ function updateHandler(orderCardElement, order) {
     .catch((error) => {});
 }
 
-function attachEvents(cardElement, order) {
-  const decrementButton = cardElement.querySelector("#decrementButton");
-  const incrementButton = cardElement.querySelector("#incrementButton");
-  const saveButton = cardElement.querySelector(".save-button");
-  const input = cardElement.querySelector(".quantity-input");
-  const dropdown = cardElement.querySelector(".ticket-category-dropdown");
-  const priceElement = cardElement.querySelector("#totalPrice");
+function attachEvents(orderCard, order) {
+  const decrementButton = orderCard.querySelector("#decrementButton");
+  const incrementButton = orderCard.querySelector("#incrementButton");
+  const saveButton = orderCard.querySelector(".save-button");
+  const input = orderCard.querySelector(".quantity-input");
+  const dropdown = orderCard.querySelector(".ticket-category-dropdown");
+  const priceElement = orderCard.querySelector("#totalPrice");
 
   decrementButton.addEventListener("click", function () {
     if (input.value > input.min) {
@@ -123,12 +130,11 @@ function attachEvents(cardElement, order) {
   });
 
   saveButton.addEventListener("click", function () {
-    updateHandler(cardElement, order);
+    updateHandler(orderCard, order);
   });
 
   if (dropdown) {
     dropdown.addEventListener("change", function () {
-      const selectedCategory = dropdown.selectedOptions[0].text;
       updatePriceItem(input, dropdown, priceElement);
     });
   }

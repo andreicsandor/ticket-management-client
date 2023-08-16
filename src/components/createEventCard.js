@@ -69,13 +69,13 @@ function createHandler(dropdown, input, cartButton, priceElement) {
     });
 }
 
-function attachEvents(cardElement) {
-  const decrementButton = cardElement.querySelector("#decrementButton");
-  const incrementButton = cardElement.querySelector("#incrementButton");
-  const cartButton = cardElement.querySelector(".add-button");
-  const input = cardElement.querySelector(".quantity-input");
-  const dropdown = cardElement.querySelector(".ticket-category-dropdown");
-  const priceElement = cardElement.querySelector("#totalPrice");
+function attachEvents(eventCard) {
+  const decrementButton = eventCard.querySelector("#decrementButton");
+  const incrementButton = eventCard.querySelector("#incrementButton");
+  const cartButton = eventCard.querySelector(".add-button");
+  const input = eventCard.querySelector(".quantity-input");
+  const dropdown = eventCard.querySelector(".ticket-category-dropdown");
+  const priceElement = eventCard.querySelector("#totalPrice");
 
   decrementButton.addEventListener("click", function () {
     if (input.value > input.min) {
