@@ -241,17 +241,17 @@ h2 {
 } 
 
 /* Edit orders section styles */
-.event-edit-card {
+.order-edit-card {
   background: var(--background-white);
   border: none;
   border-radius: 7px;
   box-shadow: var(--medium-shadow);
   margin: auto;
   overflow: hidden;
-  width: 80%;
+  max-width: 80%;
 }
 
-.event-edit-card .card-img-top {
+.order-edit-card .card-img-top {
   border-top-left-radius: 5px; 
   border-top-right-radius: 5px;
   display: block;
@@ -259,15 +259,15 @@ h2 {
   width: 100%;
 }
 
-.event-edit-card .card-body {
+.order-edit-card .card-body {
   padding: 1.5rem;
 }
 
-.event-edit-card .card-body header {
+.order-edit-card .card-body header {
   margin-bottom: 1rem;
 }
 
-.event-edit-card .card-body .event-title {
+.order-edit-card .card-body .event-title {
   font-size: 1.5rem;
   margin: 0;
 }

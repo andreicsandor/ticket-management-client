@@ -13,7 +13,7 @@ export function createEditableCard(event, order) {
       : `${formattedStartDate} – ${formattedEndDate}`;
 
   const contentMarkup = `
-      <div class="event-edit-card">
+      <div class="order-edit-card">
         <img src="${event.eventImage}" class="card-img-top" alt="${
           event.eventImage
         }">
