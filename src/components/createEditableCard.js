@@ -91,7 +91,6 @@ function updateHandler(orderCardElement, order) {
   updateOrder(orderId, newTicketType, newQuantity)
     .then(() => {
       refreshOrderCard(order);
-      resetEditPanel();
     })
     .catch((error) => {});
 }

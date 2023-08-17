@@ -3,8 +3,6 @@ import { createOrderCard } from "./components/createOrderCard";
 import { getEvent } from "./api/fetchEvents";
 
 export const addOrderCards = async (orders) => {
-  resetEditPanel();
-
   const ordersContainer = document.querySelector(".orders");
   ordersContainer.innerHTML = "No orders available";
 

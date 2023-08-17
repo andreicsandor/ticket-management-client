@@ -1,4 +1,4 @@
-import { addEventCards, addOrderCards, ordersSortConfig } from "./src/utils";
+import { addEventCards, addOrderCards, resetEditPanel } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
 import { createOrdersSort } from "./src/components/createOrdersSort";
@@ -84,6 +84,7 @@ function renderOrdersPage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
+  resetEditPanel();
   createOrdersSort();
 
   getOrders().then((data) => {
