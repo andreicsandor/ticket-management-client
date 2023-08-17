@@ -1,5 +1,5 @@
 import { formatDate, updatePriceItem, resetEditPanel, refreshOrderCard } from "../utils";
-import { createDropdownItem } from "./createDropdown";
+import { createTicketDropdownItem } from "./createTicketDropdown";
 import { createIncrementerItem } from "./createIncrementer";
 import { updateOrder } from "../api/updateOrder";
 
@@ -26,7 +26,7 @@ export function createEditableCard(event, order) {
             <p class="description text-gray-700">${event.eventDescription}</p>
             <p class="date text-gray-700">${displayDate}</p>
             <div class="order-options text-gray-700">
-              ${createDropdownItem(event.ticketCategories, orderCategory)}
+              ${createTicketDropdownItem(event.ticketCategories, orderCategory)}
               ${createIncrementerItem()}
             </div>
             <div class="purchase-options text-gray-700">

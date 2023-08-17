@@ -1,12 +1,17 @@
 import {
-  addOrderCards,
-  ordersSortConfig,
-  setOrdersSortConfig,
+  ordersSortState as state,
+  setOrdersSortState as setSortState,
   toggleSortButton,
+  getSortedOrders
 } from "../utils";
-import { getOrders } from "../api/fetchOrders";
 
 export function createOrdersSortButtons() {
+  const ordersSortContainer = document.querySelector(".orders-sort");
+
+  const sortByLabel = document.createElement("h3");
+  sortByLabel.innerText = "Sort by";
+  ordersSortContainer.appendChild(sortByLabel);
+
   const dateButton = document.createElement("button");
   dateButton.className = "sort-button";
   dateButton.innerHTML = "Date";
@@ -18,18 +23,17 @@ export function createOrdersSortButtons() {
   priceButton.dataset.type = "Price";
 
   dateButton.addEventListener("click", function () {
-    toggleHandler(dateButton);
+    sortHandler(dateButton);
   });
 
   priceButton.addEventListener("click", function () {
-    toggleHandler(priceButton);
+    sortHandler(priceButton);
   });
 
-  const ordersSortContainer = document.querySelector(".orders-sort");
   ordersSortContainer.append(dateButton, priceButton);
 }
 
-function toggleHandler(clickedButton) {
+function sortHandler(clickedButton) {
   const buttonType = clickedButton.dataset.type.toLowerCase();
   let previousButton;
 
@@ -39,28 +43,26 @@ function toggleHandler(clickedButton) {
     previousButton = document.querySelector('button[data-type="Date"]');
   }
 
-  if (ordersSortConfig.criterion !== buttonType) {
+  if (state.criterion !== buttonType) {
     toggleSortButton(previousButton, "none");
   }
 
   if (
-    ordersSortConfig.criterion === buttonType &&
-    ordersSortConfig.direction === "ascending"
+    state.criterion === buttonType &&
+    state.direction === "ascending"
   ) {
-    setOrdersSortConfig("none", "none");
+    setSortState("none", "none");
     toggleSortButton(clickedButton, "none");
   } else if (
-    ordersSortConfig.criterion === buttonType &&
-    ordersSortConfig.direction === "descending"
+    state.criterion === buttonType &&
+    state.direction === "descending"
   ) {
-    setOrdersSortConfig(buttonType, "ascending");
+    setSortState(buttonType, "ascending");
     toggleSortButton(clickedButton, "ascending");
   } else {
-    setOrdersSortConfig(buttonType, "descending");
+    setSortState(buttonType, "descending");
     toggleSortButton(clickedButton, "descending");
   }
 
-  getOrders().then((data) => {
-    addOrderCards(data);
-  });
+  getSortedOrders();
 }

@@ -1,6 +1,7 @@
 import { createEventCard } from "./components/createEventCard";
 import { createOrderCard } from "./components/createOrderCard";
-import { getEvent } from "./api/fetchEvents";
+import { getEvent, getEvents } from "./api/fetchEvents";
+import { getOrders } from "./api/fetchOrders";
 
 // Addings cards functions
 
@@ -11,29 +12,7 @@ export const addOrderCards = async (orders) => {
   if (orders.length) {
     ordersContainer.innerHTML = "";
 
-    let sortedOrders;
-
-    switch (ordersSortConfig.criterion) {
-      case "date":
-        sortedOrders =
-          ordersSortConfig.direction === "ascending"
-            ? sortOrdersByDate(orders)
-            : sortOrdersByDate(orders, "descending");
-        break;
-      case "price":
-        sortedOrders =
-          ordersSortConfig.direction === "ascending"
-            ? sortOrdersByPrice(orders)
-            : sortOrdersByPrice(orders, "descending");
-        break;
-      case "none":
-        sortedOrders = orders;
-        break;
-      default:
-        throw new Error("Invalid sort criterion.");
-    }
-
-    for (let order of sortedOrders) {
+    for (let order of orders) {
       const data = await getEvent(order.eventId);
       const eventName = data.eventName;
       ordersContainer.appendChild(createOrderCard(order, eventName));
@@ -48,29 +27,7 @@ export const addEventCards = (events) => {
   if (events.length) {
     eventsContainer.innerHTML = "";
 
-    let sortedEvents;
-
-    switch (eventsSortConfig.criterion) {
-      case "date":
-        sortedEvents =
-          eventsSortConfig.direction === "ascending"
-            ? sortEventsByDate(events)
-            : sortEventsByDate(events, "descending");
-        break;
-      case "name":
-        sortedEvents =
-          eventsSortConfig.direction === "ascending"
-            ? sortEventsByName(events)
-            : sortEventsByName(events, "descending");
-        break;
-      case "none":
-        sortedEvents = events;
-        break;
-      default:
-        throw new Error("Invalid sort criterion.");
-    }
-
-    for (let event of sortedEvents) {
+    for (let event of events) {
       eventsContainer.appendChild(createEventCard(event));
     }
   }
@@ -155,16 +112,54 @@ export function toggleSortButton(button, state) {
   }
 }
 
+export function toggleDropdown(dropdown, state) {
+  if (state === "selected") {
+    dropdown.className = "filter-dropdown active";
+  } else {
+    dropdown.className = "filter-dropdown";
+  }
+}
+
 // Sorting functions & constants for Orders
 
-export const ordersSortConfig = {
+export const ordersSortState = {
   criterion: "none",
   direction: "none",
 };
 
-export function setOrdersSortConfig(criterion, direction = "none") {
-  ordersSortConfig.criterion = criterion;
-  ordersSortConfig.direction = direction;
+export async function getSortedOrders() {
+  const criterionSort = ordersSortState.criterion;
+  const directionSort = ordersSortState.direction;
+  const orders = await getOrders();
+
+  let sortedOrders;
+
+  switch (criterionSort) {
+    case "date":
+      sortedOrders =
+        directionSort === "ascending"
+          ? sortOrdersByDate(orders)
+          : sortOrdersByDate(orders, "descending");
+      break;
+    case "price":
+      sortedOrders =
+        directionSort === "ascending"
+          ? sortOrdersByPrice(orders)
+          : sortOrdersByPrice(orders, "descending");
+      break;
+    case "none":
+      sortedOrders = orders;
+      break;
+    default:
+      throw new Error("Invalid sort criterion.");
+  }
+
+  addOrderCards(sortedOrders);
+}
+
+export function setOrdersSortState(criterion, direction = "none") {
+  ordersSortState.criterion = criterion;
+  ordersSortState.direction = direction;
 }
 
 export function sortOrdersByDate(orders, direction = "ascending") {
@@ -193,16 +188,59 @@ export function sortOrdersByPrice(orders, direction = "ascending") {
   });
 }
 
-// Sorting functions & constants for Events
+// Filtering and Sorting functions & constants for Events
 
-export const eventsSortConfig = {
-  criterion: "none",
-  direction: "none",
+export const eventsFilterSortState = {
+  filter: {
+    venueId: null,
+    eventTypeName: null,
+  },
+  sort: {
+    criterion: "none",
+    direction: "none",
+  },
 };
 
-export function setEventsSortConfig(criterion, direction = "none") {
-  eventsSortConfig.criterion = criterion;
-  eventsSortConfig.direction = direction;
+export async function getFilteredSortedEvents() {
+  const venueFilter = eventsFilterSortState.filter.venueId;
+  const typeFilter = eventsFilterSortState.filter.eventTypeName;
+  const criterionSort = eventsFilterSortState.sort.criterion;
+  const directionSort = eventsFilterSortState.sort.direction;
+  const filteredEvents = await getEvents(venueFilter, typeFilter);
+
+  let sortedEvents;
+
+  switch (criterionSort) {
+    case "date":
+      sortedEvents =
+        directionSort === "ascending"
+          ? sortEventsByDate(filteredEvents)
+          : sortEventsByDate(filteredEvents, "descending");
+      break;
+    case "name":
+      sortedEvents =
+        directionSort === "ascending"
+          ? sortEventsByName(filteredEvents)
+          : sortEventsByName(filteredEvents, "descending");
+      break;
+    case "none":
+      sortedEvents = filteredEvents;
+      break;
+    default:
+      throw new Error("Invalid sort criterion.");
+  }
+
+  addEventCards(sortedEvents);
+}
+
+export function setEventsFilterState(venueId = null, eventTypeName = null) {
+  eventsFilterSortState.filter.venueId = venueId;
+  eventsFilterSortState.filter.eventTypeName = eventTypeName;
+}
+
+export function setEventsSortState(criterion, direction = "none") {
+  eventsFilterSortState.sort.criterion = criterion;
+  eventsFilterSortState.sort.direction = direction;
 }
 
 export function sortEventsByDate(events, direction = "ascending") {
@@ -234,4 +272,26 @@ export function sortEventsByName(events, direction = "ascending") {
     // names are equal
     return 0;
   });
+}
+
+// Manipulating data
+
+export function getEventVenues(events) {
+  const eventVenues = [];
+
+  events.forEach((event) => {
+    if (!eventVenues.some((venue) => venue.id === event.venue.venueId)) {
+      eventVenues.push({
+        id: event.venue.venueId,
+        name: event.venue.venueName,
+      });
+    }
+  });
+
+  return eventVenues;
+}
+
+export function getEventTypes(events) {
+  const eventTypes = new Set(events.map((event) => event.eventType));
+  return eventTypes;
 }

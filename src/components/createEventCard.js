@@ -1,5 +1,5 @@
 import { formatDate, updatePriceItem, toggleCartButton } from "../utils";
-import { createDropdownItem } from "./createDropdown";
+import { createTicketDropdownItem } from "./createTicketDropdown";
 import { createIncrementerItem } from "./createIncrementer";
 import { createOrder } from "../api/createOrders";
 
@@ -23,9 +23,10 @@ export function createEventCard(event) {
         </header>
         <div class="content">
           <p class="description text-gray-700">${event.eventDescription}</p>
-          <p class="date text-gray-700">${displayDate}</p>
+          <p class="date text-gray-700" style="font-size: 0.9rem;">${displayDate}</p>
+          <p class="date text-gray-700" style="font-size: 0.9rem;">${event.venue.venueName}</p>
           <div class="order-options text-gray-700">
-            ${createDropdownItem(event.ticketCategories)}
+            ${createTicketDropdownItem(event.ticketCategories)}
             ${createIncrementerItem()}
           </div>
           <div class="purchase-options text-gray-700">

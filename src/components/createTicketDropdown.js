@@ -1,11 +1,13 @@
-export function createDropdownItem(ticketCategories, orderCategory) {
+export function createTicketDropdownItem(ticketCategories, orderCategory) {
   if (!ticketCategories || ticketCategories.length === 0) return "";
 
   const options = ticketCategories
     .map(
       (category) => `
-      <option value="${category.ticketCategoryId}" data-price="${category.price}" 
-      ${category.ticketCategoryDescription === orderCategory ? 'selected' : ''}>
+      <option value="${category.ticketCategoryId}" data-price="${
+        category.price
+      }" 
+      ${category.ticketCategoryDescription === orderCategory ? "selected" : ""}>
         ${category.ticketCategoryDescription} 
       </option>
     `

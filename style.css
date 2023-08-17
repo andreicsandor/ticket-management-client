@@ -110,11 +110,24 @@ h3 {
   padding: var(--medium-padding); 
 }
 
+.events-menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.events-filter {
+  align-items: center; 
+  display: flex;
+  justify-content: flex-end; 
+  margin-left: var(--small-padding);
+  margin-bottom: 1rem;
+}
+
 .events-sort {
   align-items: center; 
   display: flex;
   justify-content: flex-end; 
-  margin-right: var(--large-padding);
+  margin-right: var(--small-padding);
   margin-bottom: 1rem;
 }
 
@@ -173,7 +186,7 @@ h3 {
 .orders-sort {
   align-items: center; 
   display: flex;
-  justify-content:flex-start; 
+  justify-content: flex-start; 
   margin-left: var(--small-padding);
   margin-bottom: var(--small-padding);
 }
@@ -445,7 +458,7 @@ h3 {
   outline: none;
   cursor: pointer;
   width: 50%;
-  transition: border-color 0.15s ease-in-out;
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
   position: relative;
   background-image: url('./src/assets/caret-down-fill.svg');
   background-repeat: no-repeat;
@@ -471,6 +484,50 @@ h3 {
   border: none;
   background-image: none;
   cursor: default;
+}
+
+.filter-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  align-items: center;
+  background-color: var(--disabled-gray);
+  background-image: url('./src/assets/caret-down-fill.svg');
+  background-position: calc(100% - 0.5rem) center;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 10px;
+  color: var(--secondary-color);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  outline: none;
+  padding: 0.5rem 1.5rem 0.5rem 1rem;
+  position: relative;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.filter-dropdown:focus {
+  border-color: #ccc;
+}
+
+.filter-dropdown:hover {
+  background-color: var(--background-white);
+  color: var(--secondary-color);
+}
+
+.filter-dropdown.active {
+  background-color: var(--background-medium);
+  background-image: url('./src/assets/caret-down-fill-white.svg');
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.filter-dropdown.active:hover {
+  background-color: var(--background-dark);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Input styles */

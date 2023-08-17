@@ -2,7 +2,7 @@ import { addEventCards, addOrderCards, resetEditPanel } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
 import { createOrdersSortButtons } from "./src/components/createOrdersMenu";
-import { createEventsSortButtons } from "./src/components/createEventsMenu";
+import { createEventsFilterDropdowns, createEventsSortButtons } from "./src/components/createEventsMenu";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -16,7 +16,10 @@ function getHomePageTemplate() {
     <div id="content" >
       <div class="events-container">
         <div class="events-section">
-          <div class="events-sort"><h3>Sort by</h3></div>
+          <div class="events-menu">
+            <div class="events-filter"></div>
+            <div class="events-sort"></div>
+          </div>
           <div class="events"></div>
         </div>
       </div>
@@ -29,7 +32,7 @@ function getOrdersPageTemplate() {
     <div id="content">
       <div class="orders-container">
         <div class="orders-section">
-          <div class="orders-sort"><h3>Sort by</h3></div>
+          <div class="orders-sort"></div>
           <div class="orders"></div>
         </div>
         <div class="edit-section"></div>
@@ -75,12 +78,12 @@ function setupInitialPage() {
 function renderHomePage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getHomePageTemplate();
-
-  createEventsSortButtons();
-
+  
   getEvents().then((data) => {
     const events = data;
     addEventCards(events);
+    createEventsSortButtons();
+    createEventsFilterDropdowns(events);
   });
 }
 
@@ -88,12 +91,11 @@ function renderOrdersPage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
-  resetEditPanel();
-  createOrdersSortButtons();
-
   getOrders().then((data) => {
     const orders = data;
     addOrderCards(orders);
+    resetEditPanel();
+    createOrdersSortButtons();
   });
 }
 
