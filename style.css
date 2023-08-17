@@ -179,7 +179,7 @@ h2 {
   background: var(--background-white);
   border: none;
   border-radius: 10px;
-  box-shadow: var(--strong-shadow);
+  box-shadow: var(--medium-shadow);
   margin: 15px;
   overflow: hidden; 
   padding: 0px;
@@ -215,7 +215,7 @@ h2 {
 
 .order-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transform: scale(1.01);
+  transform: scale(1.005);
 }
 
 .order-card .card-body {
@@ -238,7 +238,7 @@ h2 {
   align-items: center;
   background: #f9f9fa;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--soft-shadow);
   display: flex;
   flex: 2; 
   flex-direction: column; 
