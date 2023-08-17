@@ -2,7 +2,7 @@ import { createEventCard } from "./components/createEventCard";
 import { createOrderCard } from "./components/createOrderCard";
 import { getEvent } from "./api/fetchEvents";
 
-export const addOrderCards = (orders) => {
+export const addOrderCards = async (orders) => {
   resetEditPanel();
 
   const ordersContainer = document.querySelector(".orders");
@@ -10,12 +10,34 @@ export const addOrderCards = (orders) => {
 
   if (orders.length) {
     ordersContainer.innerHTML = "";
-    orders.forEach((order) => {
-      getEvent(order.eventId).then((data) => {
-        const eventName = data.eventName;
-        ordersContainer.appendChild(createOrderCard(order, eventName));
-      });
-    });
+
+    let sortedOrders;
+
+    switch (ordersSortConfig.criterion) {
+      case "date":
+        sortedOrders =
+          ordersSortConfig.direction === "ascending"
+            ? sortOrdersByDate(orders)
+            : sortOrdersByDate(orders, "descending");
+        break;
+      case "price":
+        sortedOrders =
+          ordersSortConfig.direction === "ascending"
+            ? sortOrdersByPrice(orders)
+            : sortOrdersByPrice(orders, "descending");
+        break;
+      case "none":
+        sortedOrders = orders;
+        break;
+      default:
+        throw new Error("Invalid sort criterion.");
+    }
+
+    for (let order of sortedOrders) {
+      const data = await getEvent(order.eventId);
+      const eventName = data.eventName;
+      ordersContainer.appendChild(createOrderCard(order, eventName));
+    }
   }
 };
 
@@ -38,11 +60,11 @@ export function refreshOrderCard(order) {
   const parentNode = orderCardToUpdate.parentNode;
 
   getEvent(order.eventId).then((data) => {
-      const eventName = data.eventName;
-      const updatedOrderCard = createOrderCard(order, eventName);
-      parentNode.replaceChild(updatedOrderCard, orderCardToUpdate);
-    })
-};
+    const eventName = data.eventName;
+    const updatedOrderCard = createOrderCard(order, eventName);
+    parentNode.replaceChild(updatedOrderCard, orderCardToUpdate);
+  });
+}
 
 export function resetEditPanel() {
   const editSection = document.querySelector(".edit-section");
@@ -89,4 +111,53 @@ export function updatePriceItem(input, dropdown, priceElement) {
 export function toggleCartButton(input, cartButton) {
   const currentQuantity = parseInt(input.value);
   cartButton.disabled = currentQuantity <= 0;
+}
+
+export function toggleSortButton(button, state) {
+  if (state === "ascending") {
+    button.innerHTML = `<span class="ascending-icon"></span> ${button.dataset.type}`;
+    button.className = "sort-button active";
+  } else if (state === "descending") {
+    button.innerHTML = `<span class="descending-icon"></span> ${button.dataset.type}`;
+    button.className = "sort-button active";
+  } else {
+    button.innerHTML = button.dataset.type;
+    button.className = "sort-button";
+  }
+}
+
+export const ordersSortConfig = {
+  criterion: "none",
+  direction: "none",
+};
+
+export function setOrdersSortConfig(criterion, direction = "none") {
+  ordersSortConfig.criterion = criterion;
+  ordersSortConfig.direction = direction;
+}
+
+export function sortOrdersByDate(orders, direction = "ascending") {
+  return [...orders].sort((a, b) => {
+    const dateA = new Date(a.orderedAt);
+    const dateB = new Date(b.orderedAt);
+
+    if (direction === "ascending") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+}
+
+export function sortOrdersByPrice(orders, direction = "ascending") {
+  return [...orders].sort((a, b) => {
+    const priceA = a.totalPrice;
+    const priceB = b.totalPrice;
+
+    if (direction === "ascending") {
+      return priceA - priceB;
+    } else {
+      return priceB - priceA;
+    }
+  });
 }

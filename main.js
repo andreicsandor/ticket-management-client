@@ -1,6 +1,7 @@
-import { addEventCards, addOrderCards } from "./src/utils";
+import { addEventCards, addOrderCards, ordersSortConfig } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
+import { createOrdersSort } from "./src/components/createOrdersSort";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -26,6 +27,7 @@ function getOrdersPageTemplate() {
     <div id="content">
       <div class="orders-container">
         <div class="orders-section">
+          <div class="orders-sort"></div>
           <div class="orders"></div>
         </div>
         <div class="edit-section"></div>
@@ -84,10 +86,10 @@ function renderOrdersPage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
-  let orders;
+  createOrdersSort();
 
   getOrders().then((data) => {
-    orders = data;
+    const orders = data;
     addOrderCards(orders);
   });
 }

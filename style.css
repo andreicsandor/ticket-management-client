@@ -3,10 +3,13 @@
 :root {
   /* Colors */
   --primary-color: #584563;
-  --background-light: #f9f9fa;
-  --background-dark: #8c8fae;
+  --secondary-color: #8c8fae;
   --background-white: #fff;
+  --background-light: #f9f9fa;
+  --background-medium: #c9c9d9;
+  --background-dark: #8c8fae;
   --hover-light: #f0f0f0;
+  --hover-medium: #8c8fae;
   --hover-dark: #584563;
   --danger: red;
   --disabled-gray: #f1f1f1;
@@ -32,6 +35,7 @@
 
   /* Transitions */
   --transition-speed: 0.2s;
+  --transition-speed-slow: 0.3s;
 }
 
 body {
@@ -146,6 +150,15 @@ h2 {
   justify-content: space-between; 
   margin: 20px var(--large-padding) 0 var(--large-padding); 
   overflow-y: auto;
+  flex: 2; 
+}
+
+.orders-sort {
+  align-items: center; 
+  display: flex;
+  justify-content:flex-start; 
+  margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 
 .orders-section {
@@ -154,8 +167,12 @@ h2 {
   box-shadow: var(--soft-shadow);
   flex: 1.5;
   height: 85vh;
+  padding: var(--medium-padding);
+}
+
+.orders {
+  height: 72vh;
   overflow-y: auto;
-  padding: var(--large-padding);
 }
 
 .order-card {
@@ -248,7 +265,7 @@ h2 {
   box-shadow: var(--medium-shadow);
   margin: auto;
   overflow: hidden;
-  max-width: 80%;
+  max-width: 75%;
 }
 
 .order-edit-card .card-img-top {
@@ -278,7 +295,7 @@ h2 {
   background-color: var(--background-dark); 
   border: none;
   border-radius: 7px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -346,7 +363,7 @@ h2 {
   border: none;
   border-radius: 7px;
   background-color: var(--background-dark); 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -361,6 +378,39 @@ h2 {
 .save-button:hover {
   background-color: var(--hover-dark);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sort-button {
+  align-items: center;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--disabled-gray); 
+  color: var(--secondary-color);
+  cursor: pointer;
+  display: flex;
+  font-weight: bolder;
+  justify-content: center;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem; 
+  text-align: center;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.sort-button:hover {
+  background-color: var(--background-white);
+  color: var(--secondary-color);
+}
+
+.sort-button.active {
+  background-color: var(--background-medium);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.sort-button.active:hover {
+  background-color: var(--background-dark);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Dropdown styles */
@@ -475,6 +525,25 @@ h2 {
   justify-content: center;
 }
 
+.ascending-icon {
+  width: 16px;
+  height: 16px;
+  background: url('./src/assets/sort-up.svg') no-repeat center;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.descending-icon {
+  width: 16px;
+  height: 16px;
+  background: url('./src/assets/sort-down.svg') no-repeat center;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Media */
 @media (max-width: 600px) {
   .event-card {
     width: 90%;
@@ -530,7 +599,7 @@ h2 {
     border-radius: 0;
     box-shadow: none;
     overflow: visible;
-    width: 85%;
+    height: 85%;
   }
 
   .event-edit-card .card-img-top {
