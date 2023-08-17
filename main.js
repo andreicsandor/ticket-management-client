@@ -1,7 +1,8 @@
 import { addEventCards, addOrderCards, resetEditPanel } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
-import { createOrdersSort } from "./src/components/createOrdersSort";
+import { createOrdersSortButtons } from "./src/components/createOrdersMenu";
+import { createEventsSortButtons } from "./src/components/createEventsMenu";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -15,6 +16,7 @@ function getHomePageTemplate() {
     <div id="content" >
       <div class="events-container">
         <div class="events-section">
+          <div class="events-sort"><h3>Sort by</h3></div>
           <div class="events"></div>
         </div>
       </div>
@@ -27,7 +29,7 @@ function getOrdersPageTemplate() {
     <div id="content">
       <div class="orders-container">
         <div class="orders-section">
-          <div class="orders-sort"></div>
+          <div class="orders-sort"><h3>Sort by</h3></div>
           <div class="orders"></div>
         </div>
         <div class="edit-section"></div>
@@ -74,6 +76,8 @@ function renderHomePage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getHomePageTemplate();
 
+  createEventsSortButtons();
+
   getEvents().then((data) => {
     const events = data;
     addEventCards(events);
@@ -85,7 +89,7 @@ function renderOrdersPage() {
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
   resetEditPanel();
-  createOrdersSort();
+  createOrdersSortButtons();
 
   getOrders().then((data) => {
     const orders = data;

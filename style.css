@@ -18,6 +18,7 @@
   --main-font-family: 'Roboto', sans-serif;
   --h1-font-size: 32px;
   --h2-font-size: 18px;
+  --h3-font-size: 16px;
   --event-title-font-size: 1.5rem;
   --edit-section-title-font-size: 1.1rem;
 
@@ -55,6 +56,14 @@ h1 {
 
 h2 {
   font-size: var(--h2-font-size);
+}
+
+h3 {
+  color: var(--secondary-color);
+  font-size: var(--h3-font-size);
+  margin-right: var(--small-padding);
+  font-weight: bolder;
+  text-align: center;
 }
 
 /* Navbar styles */
@@ -99,6 +108,14 @@ h2 {
   box-shadow: var(--soft-shadow);
   flex: 1;
   padding: var(--medium-padding); 
+}
+
+.events-sort {
+  align-items: center; 
+  display: flex;
+  justify-content: flex-end; 
+  margin-right: var(--large-padding);
+  margin-bottom: 1rem;
 }
 
 .event-card {
@@ -157,8 +174,8 @@ h2 {
   align-items: center; 
   display: flex;
   justify-content:flex-start; 
-  margin-left: 1rem;
-  margin-bottom: 1rem;
+  margin-left: var(--small-padding);
+  margin-bottom: var(--small-padding);
 }
 
 .orders-section {

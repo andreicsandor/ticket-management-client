@@ -2,6 +2,8 @@ import { createEventCard } from "./components/createEventCard";
 import { createOrderCard } from "./components/createOrderCard";
 import { getEvent } from "./api/fetchEvents";
 
+// Addings cards functions
+
 export const addOrderCards = async (orders) => {
   const ordersContainer = document.querySelector(".orders");
   ordersContainer.innerHTML = "No orders available";
@@ -45,11 +47,36 @@ export const addEventCards = (events) => {
 
   if (events.length) {
     eventsContainer.innerHTML = "";
-    events.forEach((event) => {
+
+    let sortedEvents;
+
+    switch (eventsSortConfig.criterion) {
+      case "date":
+        sortedEvents =
+          eventsSortConfig.direction === "ascending"
+            ? sortEventsByDate(events)
+            : sortEventsByDate(events, "descending");
+        break;
+      case "name":
+        sortedEvents =
+          eventsSortConfig.direction === "ascending"
+            ? sortEventsByName(events)
+            : sortEventsByName(events, "descending");
+        break;
+      case "none":
+        sortedEvents = events;
+        break;
+      default:
+        throw new Error("Invalid sort criterion.");
+    }
+
+    for (let event of sortedEvents) {
       eventsContainer.appendChild(createEventCard(event));
-    });
+    }
   }
 };
+
+// Resetting elements fucntions
 
 export function refreshOrderCard(order) {
   const orderCardToUpdate = document.querySelector(
@@ -76,6 +103,8 @@ export function resetEditPanel() {
   editSection.innerHTML = contentMarkup;
 }
 
+// Formatting functions
+
 export function formatDate(dateString) {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(dateString).toLocaleDateString(undefined, options);
@@ -87,6 +116,8 @@ export function formatPrice(price) {
     maximumFractionDigits: 2,
   });
 }
+
+// Updating elements functions
 
 export function updatePriceItem(input, dropdown, priceElement) {
   const quantity = parseInt(input.value);
@@ -124,6 +155,8 @@ export function toggleSortButton(button, state) {
   }
 }
 
+// Sorting functions & constants for Orders
+
 export const ordersSortConfig = {
   criterion: "none",
   direction: "none",
@@ -157,5 +190,48 @@ export function sortOrdersByPrice(orders, direction = "ascending") {
     } else {
       return priceB - priceA;
     }
+  });
+}
+
+// Sorting functions & constants for Events
+
+export const eventsSortConfig = {
+  criterion: "none",
+  direction: "none",
+};
+
+export function setEventsSortConfig(criterion, direction = "none") {
+  eventsSortConfig.criterion = criterion;
+  eventsSortConfig.direction = direction;
+}
+
+export function sortEventsByDate(events, direction = "ascending") {
+  return [...events].sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+
+    if (direction === "ascending") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+}
+
+export function sortEventsByName(events, direction = "ascending") {
+  return [...events].sort((a, b) => {
+    const nameA = a.eventName.toUpperCase(); // Ignore case
+    const nameB = b.eventName.toUpperCase(); // Ignore case
+
+    if (nameA < nameB) {
+      return direction === "ascending" ? -1 : 1;
+    }
+
+    if (nameA > nameB) {
+      return direction === "ascending" ? 1 : -1;
+    }
+
+    // names are equal
+    return 0;
   });
 }

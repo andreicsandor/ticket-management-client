@@ -6,7 +6,7 @@ import {
 } from "../utils";
 import { getOrders } from "../api/fetchOrders";
 
-export function createOrdersSort() {
+export function createOrdersSortButtons() {
   const dateButton = document.createElement("button");
   dateButton.className = "sort-button";
   dateButton.innerHTML = "Date";
