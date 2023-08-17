@@ -74,10 +74,8 @@ function renderHomePage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getHomePageTemplate();
 
-  let events;
-
   getEvents().then((data) => {
-    events = data;
+    const events = data;
     addEventCards(events);
   });
 }
