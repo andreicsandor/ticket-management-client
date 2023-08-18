@@ -165,7 +165,7 @@ export async function getSortedOrders() {
       throw new Error("Invalid sort criterion.");
   }
 
-  addOrderCards(sortedOrders);
+  return sortedOrders;
 }
 
 export function setOrdersSortState(criterion, direction = "none") {
@@ -241,7 +241,7 @@ export async function getFilteredSortedEvents() {
       throw new Error("Invalid sort criterion.");
   }
 
-  addEventCards(sortedEvents);
+  return sortedEvents;
 }
 
 export function setEventsFilterState(venueId = null, eventTypeName = null) {

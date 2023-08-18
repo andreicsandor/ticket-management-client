@@ -2,7 +2,8 @@ import {
   ordersSortState as state,
   setOrdersSortState as setSortState,
   toggleSortButton,
-  getSortedOrders
+  getSortedOrders,
+  addOrderCards
 } from "../utils";
 
 export function createOrdersSortButtons() {
@@ -33,7 +34,7 @@ export function createOrdersSortButtons() {
   ordersSortContainer.append(dateButton, priceButton);
 }
 
-function sortHandler(clickedButton) {
+async function sortHandler(clickedButton) {
   const buttonType = clickedButton.dataset.type.toLowerCase();
   let previousButton;
 
@@ -64,5 +65,6 @@ function sortHandler(clickedButton) {
     toggleSortButton(clickedButton, "descending");
   }
 
-  getSortedOrders();
+  const orders = await getSortedOrders();
+  addOrderCards(orders);
 }

@@ -6,16 +6,45 @@ import {
   toggleSortButton,
   getEventTypes,
   getEventVenues,
-  getFilteredSortedEvents
+  getFilteredSortedEvents,
+  addEventCards,
 } from "../utils";
 import { createTypeDropdownItem } from "./createTypeDropdown";
 import { createVenueDropdownItem } from "./createVenueDropdown";
-import { createSearchBarItem } from "./createSearchBar";
 
 export function createEventsSearchBar() {
   const eventsSearchContainer = document.querySelector(".events-search");
 
-  const searchBar = createSearchBarItem();
+  const searchBar = document.createElement("div");
+  searchBar.className = "search-bar";
+
+  const searchInput = document.createElement("input");
+  searchInput.type = "text";
+  searchInput.placeholder = "Search...";
+
+  const searchButton = document.createElement("button");
+  searchButton.style.backgroundImage = "url('./src/assets/search.svg')";
+  searchButton.style.backgroundSize = "cover";
+  searchButton.style.border = "none";
+  searchButton.style.backgroundRepeat = "no-repeat";
+  searchButton.style.backgroundPosition = "center";
+  searchButton.style.width = "16px";
+  searchButton.style.height = "16px";
+
+  searchBar.appendChild(searchInput);
+  searchBar.appendChild(searchButton);
+
+  searchButton.addEventListener("click", () => {
+    const query = searchInput.value;
+    searchHandler(query);
+  });
+
+  searchInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+      const query = searchInput.value;
+      searchHandler(query);
+    }
+  });
 
   eventsSearchContainer.append(searchBar);
 }
@@ -36,14 +65,16 @@ export function createEventsFilterDropdowns(events) {
   typeDropdown.addEventListener("change", function () {
     filterHandler();
 
-    let typeState = (typeDropdown.value !== defaultTypeValue) ? "selected" : "default";
+    let typeState =
+      typeDropdown.value !== defaultTypeValue ? "selected" : "default";
     toggleDropdown(typeDropdown, typeState);
   });
 
   venueDropdown.addEventListener("change", function () {
     filterHandler();
 
-    let venueState = (venueDropdown.value !== defaultVenueValue) ? "selected" : "default";
+    let venueState =
+      venueDropdown.value !== defaultVenueValue ? "selected" : "default";
     toggleDropdown(venueDropdown, venueState);
   });
 
@@ -78,19 +109,38 @@ export function createEventsSortButtons() {
   eventsSortContainer.append(dateButton, nameButton);
 }
 
+async function searchHandler(query) {
+  const filteredAndSortedEvents = await getFilteredSortedEvents();
+  const formattedQuery = query.toLowerCase();
+
+  const searchedEvents = filteredAndSortedEvents.filter(
+    (event) =>
+      event.eventName.toLowerCase().includes(formattedQuery) ||
+      event.eventType.toLowerCase().includes(formattedQuery) ||
+      event.venue.venueName.toLowerCase().includes(formattedQuery) ||
+      event.venue.venueLocation.toLowerCase().includes(formattedQuery)
+  );
+
+  addEventCards(searchedEvents);
+}
+
 async function filterHandler() {
   const typeDropdown = document.getElementById("typeDropdown");
   const venueDropdown = document.getElementById("venueDropdown");
 
-  setFilterState(venueDropdown.selectedOptions[0].dataset.venueId, typeDropdown.value);
+  setFilterState(
+    venueDropdown.selectedOptions[0].dataset.venueId,
+    typeDropdown.value
+  );
 
-  getFilteredSortedEvents();
+  const events = await getFilteredSortedEvents();
+  addEventCards(events);
 }
 
-function sortHandler(clickedButton) {
+async function sortHandler(clickedButton) {
   const buttonType = clickedButton.dataset.type.toLowerCase();
   let previousButton;
-  
+
   if (clickedButton.dataset.type === "Date") {
     previousButton = document.querySelector('button[data-type="Name"]');
   } else {
@@ -116,5 +166,6 @@ function sortHandler(clickedButton) {
     toggleSortButton(clickedButton, "descending");
   }
 
-  getFilteredSortedEvents();
+  const events = await getFilteredSortedEvents();
+  addEventCards(events);
 }
