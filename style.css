@@ -115,6 +115,14 @@ h3 {
   justify-content: space-between;
 }
 
+.events-search {
+  align-items: center; 
+  display: flex;
+  justify-content: flex-end; 
+  margin-left: var(--small-padding);
+  margin-bottom: 1rem;
+}
+
 .events-filter {
   align-items: center; 
   display: flex;
@@ -557,6 +565,52 @@ h3 {
   box-shadow: 0 0 5px rgba(0,0,0,0.1); 
 }
 
+.search-bar {
+  align-items: center;
+  background-color: var(--background-white);
+  border: none;
+  border-radius: 10px; 
+  color: var(--secondary-color);
+  display: flex;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+  width: 100%;
+  position: relative;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: bold;
+  outline: none;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.search-bar button, .search-bar svg {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+
+.search-bar:hover {
+  background-color: var(--background-white);
+  color: var(--secondary-color);
+}
+
+.search-bar:focus-within {
+  background-color: var(--background-white);
+  color: white;
+}
+
+.search-bar:focus-within svg, .search-bar:focus-within button {
+  color: white;
+}
+
 /* Miscellaneous styles */
 .button-group {
   display: flex;
@@ -591,6 +645,10 @@ h3 {
 
 .main-content-component {
   margin-bottom: 40px;
+}
+
+.main-message {
+  margin: 15rem;
 }
 
 .events {

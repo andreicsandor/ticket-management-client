@@ -2,7 +2,7 @@ import { addEventCards, addOrderCards, resetEditPanel } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
 import { createOrdersSortButtons } from "./src/components/createOrdersMenu";
-import { createEventsFilterDropdowns, createEventsSortButtons } from "./src/components/createEventsMenu";
+import { createEventsSearchBar, createEventsFilterDropdowns, createEventsSortButtons } from "./src/components/createEventsMenu";
 
 // Navigate to a specific URL
 function navigateTo(url) {
@@ -17,6 +17,7 @@ function getHomePageTemplate() {
       <div class="events-container">
         <div class="events-section">
           <div class="events-menu">
+            <div class="events-search"></div>
             <div class="events-filter"></div>
             <div class="events-sort"></div>
           </div>
@@ -82,6 +83,7 @@ function renderHomePage() {
   getEvents().then((data) => {
     const events = data;
     addEventCards(events);
+    createEventsSearchBar();
     createEventsSortButtons();
     createEventsFilterDropdowns(events);
   });

@@ -10,6 +10,15 @@ import {
 } from "../utils";
 import { createTypeDropdownItem } from "./createTypeDropdown";
 import { createVenueDropdownItem } from "./createVenueDropdown";
+import { createSearchBarItem } from "./createSearchBar";
+
+export function createEventsSearchBar() {
+  const eventsSearchContainer = document.querySelector(".events-search");
+
+  const searchBar = createSearchBarItem();
+
+  eventsSearchContainer.append(searchBar);
+}
 
 export function createEventsFilterDropdowns(events) {
   const eventsFilterContainer = document.querySelector(".events-filter");

@@ -7,7 +7,12 @@ import { getOrders } from "./api/fetchOrders";
 
 export const addOrderCards = async (orders) => {
   const ordersContainer = document.querySelector(".orders");
-  ordersContainer.innerHTML = "No orders available";
+  
+  const mainMessage = document.createElement('h2');
+  mainMessage.innerText = 'No orders available';
+
+  ordersContainer.innerHTML = '';
+  ordersContainer.appendChild(mainMessage);
 
   if (orders.length) {
     ordersContainer.innerHTML = "";
@@ -22,7 +27,13 @@ export const addOrderCards = async (orders) => {
 
 export const addEventCards = (events) => {
   const eventsContainer = document.querySelector(".events");
-  eventsContainer.innerHTML = "No events available";
+
+  const mainMessage = document.createElement('h2');
+  mainMessage.className = 'main-message';
+  mainMessage.innerText = 'No events available';
+
+  eventsContainer.innerHTML = '';
+  eventsContainer.appendChild(mainMessage);
 
   if (events.length) {
     eventsContainer.innerHTML = "";
