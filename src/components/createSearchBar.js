@@ -7,7 +7,13 @@ export function createSearchBarItem() {
   searchInput.placeholder = "Search...";
 
   const searchButton = document.createElement("button");
-  searchButton.innerHTML = "🔍";
+  searchButton.style.backgroundImage = "url('./src/assets/search.svg')";
+  searchButton.style.backgroundSize = "cover";
+  searchButton.style.border = "none";
+  searchButton.style.backgroundRepeat = "no-repeat";
+  searchButton.style.backgroundPosition = "center";
+  searchButton.style.width = "16px"; 
+  searchButton.style.height = "16px";
 
   searchBarContainer.appendChild(searchInput);
   searchBarContainer.appendChild(searchButton);
