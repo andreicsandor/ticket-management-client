@@ -13,7 +13,7 @@ export function createEventCard(event) {
       : `${formattedStartDate} – ${formattedEndDate}`;
 
   const contentMarkup = `
-    <div class="event-card">
+    <div class="event-card" data-event-id="${event}">
       <img src="${event.eventImage}" class="card-img-top" alt="${
         event.eventImage
       }">
