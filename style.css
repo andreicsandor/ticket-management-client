@@ -742,3 +742,9 @@ h3 {
     width: 50%;
   }
 }
+
+.toast-top-center {
+  top: 12px !important;
+  right: 50% !important;
+  transform: translateX(50%) !important;
+}

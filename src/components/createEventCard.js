@@ -2,6 +2,24 @@ import { formatDate, updatePriceItem, toggleCartButton } from "../utils";
 import { createTicketDropdownItem } from "./createTicketDropdown";
 import { createIncrementerItem } from "./createIncrementer";
 import { createOrder } from "../api/createOrders";
+import toastr from 'toastr';
+
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": true,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
 
 export function createEventCard(event) {
   const eventCard = document.createElement("div");
@@ -54,18 +72,20 @@ function createHandler(dropdown, input, cartButton, priceElement) {
   const quantity = parseInt(input.value, 10);
 
   if (quantity <= 0 || !ticketType) {
-    console.error("No valid input data.");
+    console.success("No valid input data.");
     return;
   }
 
   createOrder(ticketType, quantity)
     .then(() => {
+      toastr.success("Order placed, on its way!");
       input.value = 0;
       dropdown.selectedIndex = 0;
       cartButton.disabled = true;
       priceElement.textContent = "";
     })
     .catch((error) => {
+      toastr.error("Oops! Something went wrong. We couldn't place your order.");
       console.error("Error saving the order:", error);
     });
 }

@@ -4,6 +4,23 @@ import { getEvents } from "./src/api/fetchEvents";
 import { createOrdersSortButtons } from "./src/components/createOrdersMenu";
 import { createEventsSearchBar, createEventsFilterDropdowns, createEventsSortButtons } from "./src/components/createEventsMenu";
 
+export const toastrOptions = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": true,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
+
 // Navigate to a specific URL
 function navigateTo(url) {
   history.pushState(null, null, url);

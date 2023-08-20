@@ -2,6 +2,24 @@ import { formatDate, formatPrice, resetEditPanel } from "../utils";
 import { createEditableCard } from "./createEditableCard";
 import { getEvent } from "../api/fetchEvents";
 import { deleteOrder } from "../api/deleteOrders";
+import toastr from 'toastr';
+
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": true,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": false,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
 
 export function createOrderCard(order, eventName) {
   const orderCard = document.createElement("div");
@@ -49,10 +67,14 @@ async function deleteHandler(order, orderCardElement) {
 
   deleteOrder(orderId)
     .then(() => {
+      toastr.info("Order has been deleted.");
       orderCardElement.remove();
       resetEditPanel();
     })
-    .catch((error) => {});
+    .catch((error) => {
+      toastr.error("Oops! Something went wrong. We couldn't delete your order.");
+      console.error("Error deleting the order:", error);
+    });
 }
 
 async function editHandler(order) {
