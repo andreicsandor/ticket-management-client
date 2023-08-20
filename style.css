@@ -297,6 +297,13 @@ h3 {
   text-align: center;
 } 
 
+.edit-holder {
+  align-items: center;
+  display: flex;
+  flex-direction: column; 
+  padding: 20px;
+}
+
 /* Edit orders section styles */
 .order-edit-card {
   background: var(--background-white);
@@ -682,7 +689,7 @@ h3 {
   display: none !important;
 }
 
-#loader {
+#eventsLoader, #ordersLoader, #editLoader {
   display: flex;
   justify-content: center; 
   align-items: center;    

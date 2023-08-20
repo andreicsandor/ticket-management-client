@@ -7,10 +7,6 @@ import {
 import { createTicketDropdownItem } from "./createTicketDropdown";
 import { createIncrementerItem } from "./createIncrementer";
 import { updateOrder } from "../api/updateOrder";
-import {
-  addOrdersLoader,
-  removeOrdersLoader,
-} from "../components/createLoader";
 
 export function createEditableCard(event, order) {
   const eventCard = document.createElement("div");

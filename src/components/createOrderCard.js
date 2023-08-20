@@ -3,7 +3,7 @@ import { createEditableCard } from "./createEditableCard";
 import { getEvent } from "../api/fetchEvents";
 import { deleteOrder } from "../api/deleteOrders";
 import toastr from 'toastr';
-import { addOrdersLoader, removeOrdersLoader } from "./createLoader";
+import { addOrdersLoader, removeOrdersLoader, addEditLoader, removeEditLoader } from "./createLoader";
 
 toastr.options = {
   "closeButton": false,
@@ -95,14 +95,31 @@ async function deleteHandler(order, orderCardElement) {
     });
 }
 
-async function editHandler(order) {
-  const relatedEvent = await getEvent(order.eventId);
-  const editableCard = createEditableCard(relatedEvent, order);
+function editHandler(order) {
+  const editHolder = document.querySelector(".edit-holder");
+  editHolder.classList.add("hidden"); 
 
-  const editSection = document.querySelector(".edit-section");
-  editSection.innerHTML = "";
+  addEditLoader();
 
-  editSection.appendChild(editableCard);
+  getEvent(order.eventId)
+    .then(relatedEvent => {
+      const editableCard = createEditableCard(relatedEvent, order);
+      const editHolder = document.querySelector(".edit-holder");
+      editHolder.innerHTML = "";
+      editHolder.appendChild(editableCard);
+    })
+    .catch(error => {
+      toastr.error("Something went wrong.");
+      console.error("Error fetching related event:", error);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        removeEditLoader();
+
+        const editHolder = document.querySelector(".edit-holder");
+        editHolder.classList.remove("hidden"); 
+      }, 200);
+    });
 }
 
 function attachEvents(orderCard, order) {

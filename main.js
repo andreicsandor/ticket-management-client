@@ -48,7 +48,7 @@ function getHomePageTemplate() {
             <div class="events-filter"></div>
             <div class="events-sort"></div>
           </div>
-          <div id="loader" class="hidden">
+          <div id="eventsLoader" class="hidden">
             <i class="fa-solid fa-ticket-simple fa-fade fa-2xl" style="color: #c9c9d9;"></i>
           </div>
           <div class="events hidden"></div>
@@ -64,12 +64,18 @@ function getOrdersPageTemplate() {
       <div class="orders-container">
         <div class="orders-section">
           <div class="orders-sort hidden"></div>
-          <div id="loader" class="hidden">
+          <div id="ordersLoader" class="hidden">
             <i class="fa-solid fa-ticket-simple fa-fade fa-2xl" style="color: #c9c9d9;"></i>
           </div>
           <div class="orders hidden"></div>
         </div>
-        <div class="edit-section"></div>
+        <div class="edit-section">
+          <div class="edit-holder">
+          </div>
+          <div id="editLoader" class="hidden">
+            <i class="fa-solid fa-masks-theater fa-fade fa-2xl" style="color: #c9c9d9;"></i>
+          </div>
+        </div>
       </div>
     </div>
   `;

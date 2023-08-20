@@ -60,7 +60,7 @@ export function refreshOrderCard(order) {
 }
 
 export function resetEditPanel() {
-  const editSection = document.querySelector(".edit-section");
+  const editSection = document.querySelector(".edit-holder");
 
   const contentMarkup = `
         <img src="./src/assets/bag-fill.svg" alt="Logo" style="margin-bottom: 20px">
