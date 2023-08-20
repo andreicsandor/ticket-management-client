@@ -109,6 +109,7 @@ h3 {
   box-shadow: var(--soft-shadow);
   flex: 1;
   padding: var(--medium-padding); 
+  min-height: 85vh; 
 }
 
 .events-menu {
