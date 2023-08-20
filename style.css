@@ -658,7 +658,10 @@ h3 {
 }
 
 .main-message {
-  margin: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 90%; 
 }
 
 .events {

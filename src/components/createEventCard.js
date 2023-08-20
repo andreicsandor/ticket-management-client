@@ -78,14 +78,14 @@ function createHandler(dropdown, input, cartButton, priceElement) {
 
   createOrder(ticketType, quantity) 
     .then(() => {
-      toastr.success("Order placed & on its way!");
+      toastr.success("Order placed successfully.", "Hooray!&nbsp;&nbsp;&nbsp;🎫");
       input.value = 0;
       dropdown.selectedIndex = 0;
       cartButton.disabled = true;
       priceElement.textContent = "";
     })
     .catch((error) => {
-      toastr.error("Oops! We couldn't place your order.");
+      toastr.error("We couldn't place your order.", "Oops!&nbsp;&nbsp;&nbsp;🙁");
       console.error("Error saving the order:", error);
     });
 }

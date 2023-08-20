@@ -98,7 +98,7 @@ function updateHandler(orderCardElement, order) {
       refreshOrderCard(order);
     })
     .catch((error) => {
-      toastr.error("Oops! We couldn't update your order.");
+      toastr.error("We couldn't update your order.", "Oops!&nbsp;&nbsp;&nbsp;😢");
       console.error("Error updating the order:", error);
     })
     .finally(() => {});

@@ -9,6 +9,7 @@ export const addOrderCards = async (orders) => {
   const ordersContainer = document.querySelector(".orders");
   
   const mainMessage = document.createElement('h2');
+  mainMessage.className = 'main-message';
   mainMessage.innerText = 'No orders available';
 
   ordersContainer.innerHTML = '';

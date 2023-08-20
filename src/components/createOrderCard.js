@@ -75,12 +75,12 @@ async function deleteHandler(order, orderCardElement) {
 
   deleteOrder(orderId)
     .then(() => {
-      toastr.success("Woosh, order has been deleted!");
+      toastr.success("Order has been cancelled.", "Woosh!&nbsp;&nbsp;&nbsp;🎭");
       orderCardElement.remove();
       resetEditPanel();
     })
     .catch((error) => {
-      toastr.error("Oops! We couldn't delete your order.");
+      toastr.error("We couldn't delete your order.", "Oops!&nbsp;&nbsp;&nbsp;🤔");
       console.error("Error deleting the order:", error);
     })
     .finally(() => {
