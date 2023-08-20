@@ -117,7 +117,6 @@ async function searchHandler(query) {
     (event) =>
       event.eventName.toLowerCase().includes(formattedQuery) ||
       event.eventType.toLowerCase().includes(formattedQuery) ||
-      event.venue.venueName.toLowerCase().includes(formattedQuery) ||
       event.venue.venueLocation.toLowerCase().includes(formattedQuery)
   );
 

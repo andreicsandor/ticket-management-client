@@ -661,7 +661,7 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center; 
-  height: 90%; 
+  height: 65vh; 
 }
 
 .events {
