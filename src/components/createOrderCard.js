@@ -75,7 +75,7 @@ async function deleteHandler(order, orderCardElement) {
 
   deleteOrder(orderId)
     .then(() => {
-      toastr.success("Woosh... Order has been deleted!");
+      toastr.success("Woosh, order has been deleted!");
       orderCardElement.remove();
       resetEditPanel();
     })
