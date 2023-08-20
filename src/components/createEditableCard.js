@@ -1,7 +1,16 @@
-import { formatDate, updatePriceItem, resetEditPanel, refreshOrderCard } from "../utils";
+import {
+  formatDate,
+  updatePriceItem,
+  resetEditPanel,
+  refreshOrderCard,
+} from "../utils";
 import { createTicketDropdownItem } from "./createTicketDropdown";
 import { createIncrementerItem } from "./createIncrementer";
 import { updateOrder } from "../api/updateOrder";
+import {
+  addOrdersLoader,
+  removeOrdersLoader,
+} from "../components/createLoader";
 
 export function createEditableCard(event, order) {
   const eventCard = document.createElement("div");
@@ -92,7 +101,11 @@ function updateHandler(orderCardElement, order) {
     .then(() => {
       refreshOrderCard(order);
     })
-    .catch((error) => {});
+    .catch((error) => {
+      toastr.error("Oops! We couldn't update your order.");
+      console.error("Error updating the order:", error);
+    })
+    .finally(() => {});
 }
 
 function attachEvents(orderCard, order) {

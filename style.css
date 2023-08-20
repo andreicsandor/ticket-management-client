@@ -44,17 +44,18 @@ body {
 }
 
 h1, h2 {
-  color: var(--primary-color);
   font-weight: bold;
   margin-bottom: var(--base-margin);
 }
 
 h1 {
+  color: var(--primary-color);
   font-size: var(--h1-font-size);
   text-align: center;
 }
 
 h2 {
+  color: var(--secondary-color);
   font-size: var(--h2-font-size);
 }
 
@@ -674,6 +675,17 @@ h3 {
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#loader {
+  display: flex;
+  justify-content: center; 
+  align-items: center;    
+  min-height: 70vh;                  
 }
 
 /* Media */

@@ -2,23 +2,33 @@ import { addEventCards, addOrderCards, resetEditPanel } from "./src/utils";
 import { getOrders } from "./src/api/fetchOrders";
 import { getEvents } from "./src/api/fetchEvents";
 import { createOrdersSortButtons } from "./src/components/createOrdersMenu";
-import { createEventsSearchBar, createEventsFilterDropdowns, createEventsSortButtons } from "./src/components/createEventsMenu";
+import {
+  createEventsSearchBar,
+  createEventsFilterDropdowns,
+  createEventsSortButtons,
+} from "./src/components/createEventsMenu";
+import {
+  addEventsLoader,
+  addOrdersLoader,
+  removeEventsLoader,
+  removeOrdersLoader,
+} from "./src/components/createLoader";
 
 export const toastrOptions = {
-  "closeButton": true,
-  "debug": false,
-  "newestOnTop": false,
-  "progressBar": true,
-  "positionClass": "toast-top-right",
-  "preventDuplicates": true,
-  "showDuration": "300",
-  "hideDuration": "1000",
-  "timeOut": "5000",
-  "extendedTimeOut": "1000",
-  "showEasing": "swing",
-  "hideEasing": "linear",
-  "showMethod": "fadeIn",
-  "hideMethod": "fadeOut"
+  closeButton: true,
+  debug: false,
+  newestOnTop: false,
+  progressBar: true,
+  positionClass: "toast-top-right",
+  preventDuplicates: true,
+  showDuration: "300",
+  hideDuration: "1000",
+  timeOut: "5000",
+  extendedTimeOut: "1000",
+  showEasing: "swing",
+  hideEasing: "linear",
+  showMethod: "fadeIn",
+  hideMethod: "fadeOut",
 };
 
 // Navigate to a specific URL
@@ -33,12 +43,15 @@ function getHomePageTemplate() {
     <div id="content" >
       <div class="events-container">
         <div class="events-section">
-          <div class="events-menu">
+          <div class="events-menu hidden">
             <div class="events-search"></div>
             <div class="events-filter"></div>
             <div class="events-sort"></div>
           </div>
-          <div class="events"></div>
+          <div id="loader" class="hidden">
+            <i class="fa-solid fa-ticket-simple fa-fade fa-2xl" style="color: #c9c9d9;"></i>
+          </div>
+          <div class="events hidden"></div>
         </div>
       </div>
     </div>
@@ -50,8 +63,11 @@ function getOrdersPageTemplate() {
     <div id="content">
       <div class="orders-container">
         <div class="orders-section">
-          <div class="orders-sort"></div>
-          <div class="orders"></div>
+          <div class="orders-sort hidden"></div>
+          <div id="loader" class="hidden">
+            <i class="fa-solid fa-ticket-simple fa-fade fa-2xl" style="color: #c9c9d9;"></i>
+          </div>
+          <div class="orders hidden"></div>
         </div>
         <div class="edit-section"></div>
       </div>
@@ -96,26 +112,52 @@ function setupInitialPage() {
 function renderHomePage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getHomePageTemplate();
-  
-  getEvents().then((data) => {
-    const events = data;
-    addEventCards(events);
-    createEventsSearchBar();
-    createEventsSortButtons();
-    createEventsFilterDropdowns(events);
-  });
+
+  addEventsLoader();
+
+  getEvents()
+    .then((data) => {
+      const events = data;
+      addEventCards(events);
+      createEventsSearchBar();
+      createEventsSortButtons();
+      createEventsFilterDropdowns(events);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        removeEventsLoader();
+
+        const menuContainer = document.querySelector(".events-menu");
+        menuContainer.classList.remove("hidden"); 
+        const listContainer = document.querySelector(".events");
+        listContainer.classList.remove("hidden"); 
+      }, 500);
+    });
 }
 
 function renderOrdersPage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
-  getOrders().then((data) => {
-    const orders = data;
-    addOrderCards(orders);
-    resetEditPanel();
-    createOrdersSortButtons();
-  });
+  resetEditPanel();
+  addOrdersLoader();
+
+  getOrders()
+    .then((data) => {
+      const orders = data;
+      addOrderCards(orders);
+      createOrdersSortButtons();
+    })
+    .finally(() => {
+      setTimeout(() => {
+        removeOrdersLoader();
+        
+        const sortContainer = document.querySelector(".orders-sort");
+        sortContainer.classList.remove("hidden"); 
+        const listContainer = document.querySelector(".orders");
+        listContainer.classList.remove("hidden"); 
+      }, 500);
+    });
 }
 
 // Render content based on URL

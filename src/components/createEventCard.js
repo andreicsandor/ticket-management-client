@@ -38,7 +38,7 @@ export function createEventCard(event) {
       <div class="card-body">
         <header>
           <h2 class="event-title text-2xl font-bold">${event.eventName}</h2>
-        </header>
+        </header> 
         <div class="content">
           <p class="description text-gray-700">${event.eventDescription}</p>
           <p class="date text-gray-700" style="font-size: 0.9rem;">${displayDate}</p>
@@ -76,16 +76,16 @@ function createHandler(dropdown, input, cartButton, priceElement) {
     return;
   }
 
-  createOrder(ticketType, quantity)
+  createOrder(ticketType, quantity) 
     .then(() => {
-      toastr.success("Order placed, on its way!");
+      toastr.success("Order placed & on its way!");
       input.value = 0;
       dropdown.selectedIndex = 0;
       cartButton.disabled = true;
       priceElement.textContent = "";
     })
     .catch((error) => {
-      toastr.error("Oops! Something went wrong. We couldn't place your order.");
+      toastr.error("Oops! We couldn't place your order.");
       console.error("Error saving the order:", error);
     });
 }

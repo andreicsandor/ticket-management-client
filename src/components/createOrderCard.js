@@ -3,6 +3,7 @@ import { createEditableCard } from "./createEditableCard";
 import { getEvent } from "../api/fetchEvents";
 import { deleteOrder } from "../api/deleteOrders";
 import toastr from 'toastr';
+import { addOrdersLoader, removeOrdersLoader } from "./createLoader";
 
 toastr.options = {
   "closeButton": false,
@@ -65,15 +66,32 @@ export function createOrderCard(order, eventName) {
 async function deleteHandler(order, orderCardElement) {
   const orderId = order.orderId;
 
+  const menuContainer = document.querySelector(".orders-sort");
+  menuContainer.classList.add("hidden"); 
+  const listContainer = document.querySelector(".orders");
+  listContainer.classList.add("hidden"); 
+
+  addOrdersLoader();
+
   deleteOrder(orderId)
     .then(() => {
-      toastr.info("Order has been deleted.");
+      toastr.success("Woosh... Order has been deleted!");
       orderCardElement.remove();
       resetEditPanel();
     })
     .catch((error) => {
-      toastr.error("Oops! Something went wrong. We couldn't delete your order.");
+      toastr.error("Oops! We couldn't delete your order.");
       console.error("Error deleting the order:", error);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        removeOrdersLoader();
+
+        const menuContainer = document.querySelector(".orders-sort");
+        menuContainer.classList.remove("hidden"); 
+        const listContainer = document.querySelector(".orders");
+        listContainer.classList.remove("hidden");
+      }, 500); 
     });
 }
 
