@@ -54,6 +54,16 @@ export function createOrderCard(order, eventName) {
         </div>
       </div>
     </div>
+
+    <div class="popup-container" id="popupContainer">
+      <div class="custom-popup" id="customPopup">
+      <p style="margin-bottom: 15px; font-size: 1.1em;">Are you sure you want to cancel the order?</p>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <button class="quantity-button" style="color: #fa6e79; font-weight: bold;" id="confirmDelete">Confirm</button>
+        <button class="quantity-button" style="font-weight: bold;" id="cancelDelete">Cancel</button>
+      </div>
+      </div>
+    </div>
   `;
 
   orderCard.innerHTML = contentMarkup;
@@ -67,9 +77,9 @@ async function deleteHandler(order, orderCardElement) {
   const orderId = order.orderId;
 
   const menuContainer = document.querySelector(".orders-sort");
-  menuContainer.classList.add("hidden"); 
+  menuContainer.classList.add("hidden");
   const listContainer = document.querySelector(".orders");
-  listContainer.classList.add("hidden"); 
+  listContainer.classList.add("hidden");
 
   addOrdersLoader();
 
@@ -80,19 +90,45 @@ async function deleteHandler(order, orderCardElement) {
       resetEditPanel();
     })
     .catch((error) => {
-      toastr.error("We couldn't delete your order.", "Oops!&nbsp;&nbsp;&nbsp;🤔");
+      toastr.error(
+        "We couldn't delete your order.",
+        "Oops!&nbsp;&nbsp;&nbsp;🤔"
+      );
       console.error("Error deleting the order:", error);
     })
+
     .finally(() => {
       setTimeout(() => {
         removeOrdersLoader();
 
         const menuContainer = document.querySelector(".orders-sort");
-        menuContainer.classList.remove("hidden"); 
+        menuContainer.classList.remove("hidden");
         const listContainer = document.querySelector(".orders");
         listContainer.classList.remove("hidden");
-      }, 500); 
+      }, 500);
     });
+}
+
+async function popupHandler(order, orderCard) {
+  const overlay = document.getElementById("overlay");
+  const popupContainer = orderCard.querySelector("#popupContainer");
+  const confirmDeleteButton = orderCard.querySelector("#confirmDelete");
+  const cancelDeleteButton = orderCard.querySelector("#cancelDelete");
+
+  overlay.style.display = "block";
+  popupContainer.style.display = "block";
+
+  confirmDeleteButton.addEventListener("click", async () => {
+    deleteHandler(order, orderCard);
+
+    overlay.style.display = "none";
+    popupContainer.style.display = "none";
+  });
+
+  cancelDeleteButton.addEventListener("click", () => {
+    overlay.style.display = "none";
+    popupContainer.style.display = "none";
+  });
 }
 
 function editHandler(order) {
@@ -125,7 +161,7 @@ function editHandler(order) {
 function attachEvents(orderCard, order) {
   const deleteButton = orderCard.querySelector(".delete-button");
   deleteButton.addEventListener("click", function () {
-    deleteHandler(order, orderCard);
+    popupHandler(order, orderCard);
   });
 
   const updateButton = orderCard.querySelector(".update-button");

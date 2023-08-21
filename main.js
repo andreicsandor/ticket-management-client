@@ -145,6 +145,11 @@ function renderOrdersPage() {
   const mainContentDiv = document.querySelector(".main-content-component");
   mainContentDiv.innerHTML = getOrdersPageTemplate();
 
+  const overlay = document.createElement('div');
+  overlay.id = 'overlay';
+  overlay.className='overlay';
+  mainContentDiv.appendChild(overlay);
+
   resetEditPanel();
   addOrdersLoader();
 
