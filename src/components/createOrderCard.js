@@ -58,10 +58,11 @@ export function createOrderCard(order, eventName) {
     <div class="popup-container" id="popupContainer">
       <div class="custom-popup" id="customPopup">
       <p style="margin-bottom: 15px; font-size: 1.1em;">Are you sure you want to cancel the order?</p>
-      <div style="display: flex; justify-content: center; align-items: center;">
+      <div style="display: flex; justify-content: flex-end; align-items: center;">
         <button class="quantity-button" style="color: #fa6e79; font-weight: bold;" id="confirmDelete">Confirm</button>
         <button class="quantity-button" style="font-weight: bold;" id="cancelDelete">Cancel</button>
       </div>
+
       </div>
     </div>
   `;
